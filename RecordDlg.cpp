@@ -56,19 +56,25 @@ void CRecordDlg::SetRecord(const Record& r)
     m_rec = r;
 }
 
-Record CRecordDlg::GetRecord() const
+Record CRecordDlg::GetRecord()
 {
     Record r = m_rec;
     Record out = m_rec;
     // 读取控件数据
-    CRecordDlg* self = const_cast<CRecordDlg*>(this);
+    //CRecordDlg* self = const_cast<CRecordDlg*>(this);
+    //CString sCat, sNotes;
+    //double amt = 0.0;
+    //self->GetDlgItemText(IDC_EDIT_CATEGORY, sCat);
+    //self->GetDlgItemText(IDC_EDIT_NOTES, sNotes);
+    //CString sAmt;
+    //self->GetDlgItemText(IDC_EDIT_AMOUNT, sAmt);
+    //amt = _ttof(sAmt);
     CString sCat, sNotes;
-    double amt = 0.0;
-    self->GetDlgItemText(IDC_EDIT_CATEGORY, sCat);
-    self->GetDlgItemText(IDC_EDIT_NOTES, sNotes);
+    GetDlgItemText(IDC_EDIT_CATEGORY, sCat);
+    GetDlgItemText(IDC_EDIT_NOTES, sNotes);
     CString sAmt;
-    self->GetDlgItemText(IDC_EDIT_AMOUNT, sAmt);
-    amt = _ttof(sAmt);
+    GetDlgItemText(IDC_EDIT_AMOUNT, sAmt);
+    double amt = _ttof(sAmt);
     CDateTimeCtrl* pDate = (CDateTimeCtrl*)GetDlgItem(IDC_DATETIME_DATE);
     SYSTEMTIME st = {0};
     std::wstring datew = out.date;

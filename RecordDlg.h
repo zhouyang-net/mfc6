@@ -10,7 +10,7 @@ public:
     virtual ~CRecordDlg();
 
     void SetRecord(const Record& r);
-    Record GetRecord() const;
+    Record GetRecord();
 
 #ifdef AFX_DESIGN_TIME
     enum { IDD = IDD_RECORD_DLG };
