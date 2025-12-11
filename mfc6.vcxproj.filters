@@ -39,6 +39,27 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AppResourceDefines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Record.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RecordsDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UserDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mfc6.cpp">
@@ -54,6 +75,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RecordsDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite3.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,4 @@
-﻿
-// mfc6.h: mfc6 应用程序的主头文件
+﻿// mfc6.h: mfc6 应用程序的主头文件
 //
 #pragma once
 
@@ -27,6 +26,10 @@ public:
 
 // 实现
 	afx_msg void OnAppAbout();
+	void OnManageIncome();
+	void OnManageExpense();
+	void OnManageUsers();
+
 	DECLARE_MESSAGE_MAP()
 };
 

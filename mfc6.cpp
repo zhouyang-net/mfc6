@@ -1,5 +1,4 @@
-﻿
-// mfc6.cpp: 定义应用程序的类行为。
+﻿// mfc6.cpp: 定义应用程序的类行为。
 //
 
 #include "pch.h"
@@ -11,6 +10,11 @@
 
 #include "mfc6Doc.h"
 #include "mfc6View.h"
+
+#include "AppResourceDefines.h"
+#include "DatabaseManager.h"
+#include "RecordsDialog.h"
+#include "UserDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +30,10 @@ BEGIN_MESSAGE_MAP(Cmfc6App, CWinApp)
 	ON_COMMAND(ID_FILE_OPEN, &CWinApp::OnFileOpen)
 	// 标准打印设置命令
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinApp::OnFilePrintSetup)
+
+	ON_COMMAND(ID_MENU_INCOME, &Cmfc6App::OnManageIncome)
+	ON_COMMAND(ID_MENU_EXPENSE, &Cmfc6App::OnManageExpense)
+	ON_COMMAND(ID_MENU_USER_MANAGE, &Cmfc6App::OnManageUsers)
 END_MESSAGE_MAP()
 
 
@@ -122,6 +130,11 @@ BOOL Cmfc6App::InitInstance()
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
+	// 初始化数据库
+	if (!DatabaseManager::Instance().Initialize(L"finance.db")) {
+		AfxMessageBox(L"无法初始化数据库 finance.db，请确保 sqlite3 可用。");
+	}
+
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
@@ -178,6 +191,23 @@ void Cmfc6App::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
+void Cmfc6App::OnManageIncome()
+{
+    CRecordsDialog dlg(true, AfxGetMainWnd());
+    dlg.DoModal();
+}
+
+void Cmfc6App::OnManageExpense()
+{
+    CRecordsDialog dlg(false, AfxGetMainWnd());
+    dlg.DoModal();
+}
+
+void Cmfc6App::OnManageUsers()
+{
+    CUserDialog dlg(AfxGetMainWnd());
+    dlg.DoModal();
+}
 // Cmfc6App 消息处理程序
 
 
