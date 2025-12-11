@@ -22,6 +22,7 @@ protected:
     DECLARE_MESSAGE_MAP()
 
 private:
+    COleDateTime m_dtDate;
     Record m_rec;
     bool m_isIncome;
     CString m_sCategory;

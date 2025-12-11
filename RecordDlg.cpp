@@ -18,6 +18,7 @@ void CRecordDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT_CATEGORY, m_sCategory);
     DDX_Text(pDX, IDC_EDIT_NOTES, m_sNotes);
     DDX_Text(pDX, IDC_EDIT_AMOUNT, m_amount);
+    DDX_DateTimeCtrl(pDX, IDC_DATETIME_DATE, m_dtDate); // 使用 COleDateTime 类型
 }
 
 BEGIN_MESSAGE_MAP(CRecordDlg, CDialogEx)
@@ -27,26 +28,22 @@ BOOL CRecordDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
-    // 若已有记录，填充
     if (!m_rec.category.empty()) {
         m_sCategory = m_rec.category.c_str();
         m_sNotes = m_rec.notes.c_str();
         m_amount = m_rec.amount;
-        UpdateData(FALSE);
-        // 设置日期
-        CDateTimeCtrl* pDate = (CDateTimeCtrl*)GetDlgItem(IDC_DATETIME_DATE);
-        if (pDate) {
-            SYSTEMTIME st = {0};
-            // 期望 date 格式 YYYY-MM-DD
-            std::wstring d = m_rec.date;
-            if (d.size() >= 10) {
-                int y = _wtoi(d.substr(0,4).c_str());
-                int m = _wtoi(d.substr(5,2).c_str());
-                int day = _wtoi(d.substr(8,2).c_str());
-                st.wYear = y; st.wMonth = m; st.wDay = day;
-                pDate->SetTime(&st);
-            }
+
+        // 将 m_rec.date (std::wstring, 格式 YYYY-MM-DD) 转换为 COleDateTime
+        if (m_rec.date.size() >= 10) {
+            int y = _wtoi(m_rec.date.substr(0,4).c_str());
+            int m = _wtoi(m_rec.date.substr(5,2).c_str());
+            int d = _wtoi(m_rec.date.substr(8,2).c_str());
+            m_dtDate.SetDate(y, m, d);
+        } else {
+            m_dtDate = COleDateTime::GetCurrentTime();
         }
+
+        UpdateData(FALSE);
     }
     return TRUE;
 }
@@ -54,38 +51,21 @@ BOOL CRecordDlg::OnInitDialog()
 void CRecordDlg::SetRecord(const Record& r)
 {
     m_rec = r;
+    // 这里可以直接在 OnInitDialog 里处理日期转换
 }
 
 Record CRecordDlg::GetRecord()
 {
-    Record r = m_rec;
     Record out = m_rec;
-    // 读取控件数据
-    //CRecordDlg* self = const_cast<CRecordDlg*>(this);
-    //CString sCat, sNotes;
-    //double amt = 0.0;
-    //self->GetDlgItemText(IDC_EDIT_CATEGORY, sCat);
-    //self->GetDlgItemText(IDC_EDIT_NOTES, sNotes);
-    //CString sAmt;
-    //self->GetDlgItemText(IDC_EDIT_AMOUNT, sAmt);
-    //amt = _ttof(sAmt);
-    CString sCat, sNotes;
-    GetDlgItemText(IDC_EDIT_CATEGORY, sCat);
-    GetDlgItemText(IDC_EDIT_NOTES, sNotes);
-    CString sAmt;
-    GetDlgItemText(IDC_EDIT_AMOUNT, sAmt);
-    double amt = _ttof(sAmt);
-    CDateTimeCtrl* pDate = (CDateTimeCtrl*)GetDlgItem(IDC_DATETIME_DATE);
-    SYSTEMTIME st = {0};
-    std::wstring datew = out.date;
-    if (pDate && pDate->GetTime(&st) == GDT_VALID) {
-        WCHAR buf[16];
-        swprintf_s(buf, L"%04d-%02d-%02d", st.wYear, st.wMonth, st.wDay);
-        datew = buf;
-    }
-    out.category = std::wstring((LPCTSTR)sCat);
-    out.notes = std::wstring((LPCTSTR)sNotes);
-    out.amount = amt;
-    out.date = datew;
+    UpdateData(TRUE);
+
+    // COleDateTime -> std::wstring
+    CString strDate;
+    strDate.Format(L"%04d-%02d-%02d", m_dtDate.GetYear(), m_dtDate.GetMonth(), m_dtDate.GetDay());
+    out.date = strDate.GetString();
+
+    out.category = m_sCategory;
+    out.notes = m_sNotes;
+    out.amount = m_amount;
     return out;
 }

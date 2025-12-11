@@ -99,19 +99,21 @@ bool DatabaseManager::DeleteUser(int userId)
     return rc == SQLITE_DONE;
 }
 
-std::vector<std::pair<int, std::wstring>> DatabaseManager::GetUsers()
+std::vector<std::tuple<int, std::wstring, std::wstring>> DatabaseManager::GetUsers()
 {
-    std::vector<std::pair<int, std::wstring>> out;
+    std::vector<std::tuple<int, std::wstring, std::wstring>> out;
     if (!m_db) return out;
-    const char* sql = "SELECT id, username FROM users;";
+    const char* sql = "SELECT id, username, password FROM users;";
     sqlite3_stmt* stmt = nullptr;
     int rc = sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) return out;
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         int id = sqlite3_column_int(stmt, 0);
-        const void* txt = sqlite3_column_text16(stmt, 1);
-        std::wstring name = txt ? (const wchar_t*)txt : L"";
-        out.emplace_back(id, name);
+        const void* txt1 = sqlite3_column_text16(stmt, 1);
+        const void* txt2 = sqlite3_column_text16(stmt, 2);
+        std::wstring name = txt1 ? (const wchar_t*)txt1 : L"";
+        std::wstring pwd = txt2 ? (const wchar_t*)txt2 : L"";
+        out.emplace_back(id, name, pwd);
     }
     sqlite3_finalize(stmt);
     return out;

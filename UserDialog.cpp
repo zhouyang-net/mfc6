@@ -29,6 +29,7 @@ BOOL CUserDialog::OnInitDialog()
     m_list.ModifyStyle(0, LVS_REPORT | LVS_SHOWSELALWAYS);
     m_list.InsertColumn(0, L"ID", LVCFMT_LEFT, 40);
     m_list.InsertColumn(1, L"用户名", LVCFMT_LEFT, 140);
+    m_list.InsertColumn(2, L"密码", LVCFMT_LEFT, 140); // 新增显示密码列
     LoadUsers();
     return TRUE;
 }
@@ -38,10 +39,14 @@ void CUserDialog::LoadUsers()
     m_list.DeleteAllItems();
     auto users = DatabaseManager::Instance().GetUsers();
     int i = 0;
-    for (auto& p : users) {
-        CString sid; sid.Format(L"%d", p.first);
+    for (const auto& p : users) {
+        int uid = std::get<0>(p);
+        const std::wstring& uname = std::get<1>(p);
+        const std::wstring& upwd = std::get<2>(p);
+        CString sid; sid.Format(L"%d", uid);
         int idx = m_list.InsertItem(i++, sid);
-        m_list.SetItemText(idx, 1, CString(p.second.c_str()));
+        m_list.SetItemText(idx, 1, CString(uname.c_str()));
+        m_list.SetItemText(idx, 2, CString(upwd.c_str()));
     }
 }
 

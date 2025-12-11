@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <tuple>
 #include "Record.h"
 
 // 前向声明 sqlite3
@@ -18,7 +19,8 @@ public:
     // 用户
     bool AddUser(const std::wstring& username, const std::wstring& password);
     bool DeleteUser(int userId);
-    std::vector<std::pair<int, std::wstring>> GetUsers();
+    // 返回 (id, username, password)
+    std::vector<std::tuple<int, std::wstring, std::wstring>> GetUsers();
 
     // 记录（收入/支出）
     bool AddRecord(const Record& rec);
